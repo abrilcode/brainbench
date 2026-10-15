@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BrainBench</title>
+  <meta name="description" content="A modern interface for OpenBCI boards: live EEG, EMG and ECG, analysis, recording and streaming.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><use href="#mark"/></svg>
+      <span>BrainBench</span><span class="ver" id="version"></span>
+    </div>
+    <div class="session-info" id="session-info" hidden>
+      <span class="pill on" id="pill-board"></span>
+      <span class="pill" id="pill-rate"></span>
+      <span class="pill" id="pill-packets" title="Packets lost this session"></span>
+      <span class="pill rec" id="pill-rec" hidden></span>
+    </div>
+    <div class="spacer"></div>
+    <div class="toolbar" id="toolbar" hidden>
+      <button type="button" class="primary" id="btn-stream"><span>Start stream</span><kbd>Space</kbd></button>
+      <button type="button" id="btn-record" title="Record to a file">Record</button>
+      <button type="button" id="btn-filters" title="Filters">Filters <span class="sub" id="filter-summary"></span></button>
+      <button type="button" id="btn-layout" title="Layout">Layout</button>
+      <button type="button" id="btn-hardware" title="Channel and board settings" hidden>Hardware</button>
+      <button type="button" id="btn-settings" title="Save or load the interface settings">Settings</button>
+      <button type="button" class="ghost" id="btn-end">End session</button>
+    </div>
+    <button type="button" class="ghost" id="btn-help" title="Help and keyboard shortcuts">Help</button>
+    <span class="pill demo" id="pill-demo" hidden title="Signals are simulated in this page; install the app for real boards">Demo</span>
+  </header>
+
+  <main id="main">
+    <section class="start" id="start" hidden>
+      <div class="start-head">
+        <h1>Start a session</h1>
+        <p>Choose the board or data source, then connect. Every OpenBCI board works through BrainFlow; the synthetic board and file playback need no hardware.</p>
+      </div>
+      <div class="start-grid">
+        <div class="card sources">
+          <div class="card-title">Data source</div>
+          <div class="source-list" id="source-list"></div>
+        </div>
+        <form class="card connect" id="connect-form">
+          <div class="card-title"><span id="connect-title">Connection</span></div>
+          <div id="connect-fields"></div>
+          <div class="field-row">
+            <label class="field">Session name<input id="session-name" placeholder="e.g. alpha-pilot" autocomplete="off"></label>
+            <label class="field">Recording format
+              <select id="record-format">
+                <option value="openbci_csv">OpenBCI CSV (.csv)</option>
+                <option value="bdf">BDF+ (.bdf)</option>
+                <option value="brainflow_csv">BrainFlow CSV (.csv)</option>
+                <option value="off">Do not record</option>
+              </select>
+            </label>
+          </div>
+          <div class="field-row">
+            <label class="check" style="flex:1"><input type="checkbox" id="auto-record" checked> Record automatically while the stream runs</label>
+            <label class="field" style="flex:none;margin:0">New file every
+              <select id="max-minutes">
+                <option value="5">5 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option>
+                <option value="60" selected>60 minutes</option><option value="120">120 minutes</option><option value="-1">No limit</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint" id="record-hint"></p>
+          <button type="submit" class="primary wide" id="btn-connect">Start session</button>
+          <p class="error" id="connect-error" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="workspace" id="workspace" hidden></section>
+  </main>
+
+  <footer class="console" id="console">
+    <button type="button" class="ghost" id="console-toggle" aria-expanded="false">Console</button>
+    <span class="console-last" id="console-last">Ready.</span>
+    <span class="spacer"></span>
+    <span class="foot-note">Research and teaching software, not a medical device. Works with OpenBCI boards; not affiliated with OpenBCI.</span>
+  </footer>
+  <div class="console-panel" id="console-panel" hidden><pre id="console-text"></pre></div>
+
+  <div class="overlay" id="overlay" hidden><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="mark" viewBox="0 0 32 32">
+      <rect x="1" y="1" width="30" height="30" rx="8" fill="currentColor"/>
+      <path d="M5 18h4l2-6 3 12 3-15 3 12 2-3h5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+</body>
+</html>
